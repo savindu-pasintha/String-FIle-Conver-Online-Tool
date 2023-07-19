@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="savindu pasintha">
+    <meta name="email" content="savindupasingtha@gmail.com">
+  <meta name="website" content="https://github.com/savindu-pasintha , https://www.linkedin.com/in/savindu-pasintha/ , https://vercel.com/savindu-pasintha/savindu-pasintha">
+  <meta name="keywords" content="savindu pasintha, software developer, freelancer, react developer, react native developer, web developer, software engineer , open to relocate">
+    <meta name="description" content="This file support generate .po file for a new strings without any dublicates. created by savindu pasintha from sri lanka for a Nvision Lanka pvt led for sri lanka.">
+    <title>.Po File String Add</title>
+  </head>
+  <body>
+      <h>Upload - New Strings</h>
+      <textarea
+        style="width: 100%"
+        id="new_string_file_text"
+        name="new_string_file_text"
+        rows="10"
+        col="100"
+        placeholder="new string file text as a multilines"
+      ></textarea>
+      <br /><br />
+      <h>Do not upload - New Strings dublicates</h>
+      <textarea
+        style="width: 100%"
+        id="new_string_file_dublicate_text"
+        name="new_string_file_dublicate_text"
+        rows="10"
+        col="100"
+        placeholder="new string file dublicate text as a multilines"
+      ></textarea>
+      <br /><br />
+      <h>Upload - current .po file Strings</h>
+      <textarea
+        style="width: 100%"
+        id="current_po_file_text"
+        name="po_file_text"
+        rows="10"
+        col="100"
+        placeholder="new pro file text as a multilines"
+      ></textarea>
+      <br /><br />
+      <h>Do not upload - Dublicates in current .po file Strings</h>
+      <textarea
+        style="width: 100%"
+        id="po_file_dublicate_text"
+        name="po_file_dublicate_text"
+        rows="10"
+        col="100"
+        placeholder="new pro file dublicate text as a multilines"
+      ></textarea>
+      <br /><br />
+      <h>Latest .po file Strings (New Strings + Current .po file strings)</h>
+      <textarea
+        style="width: 100%"
+        id="latest_po_file_text"
+        name="latest_po_file_text"
+        rows="10"
+        col="100"
+        placeholder="latest pro file text as a multilines"
+      ></textarea>
+      <br /><br />
+      <button type="button" id="generate_button">Generate</button>
+   
+  </body>
+  <script type="text/javascript">
+    var list = ``
+    var proFileStrings = ``
+    document
+      .getElementById("generate_button")
+      .addEventListener("click", function () {
+       // var lines = list.split('\n');//document.getElementById("new_string_file_text").value
+       // var proFileStringLine = proFileStrings.split('\n')
+        var lines = document.getElementById("new_string_file_text").value.split(/\r?\n/);
+       
+        var proFileStringLine = document.getElementById(
+          "current_po_file_text"
+        ).value.split(/\r?\n/);
+        var setNewStringFile = new Set();
+        var setPOFile = new Set();
+
+        var allReadyIncludedItemsInPoFile = [];
+        var setDublicatesInNewString = new Set();
+        var dublicatesInNewString = [];
+
+        var dublicatesInCurrentPoFileString = [];
+
+        for (var i = 0; i < lines.length; i++) {
+          if (setDublicatesInNewString.has(lines[i])) {
+            dublicatesInNewString.push(lines[i]);
+          } else {
+            setDublicatesInNewString.add(lines[i]);
+          }
+
+          if (lines[i].trim()) {
+            setNewStringFile.add(`msgid "${lines[i].trim()}"`);
+            setNewStringFile.add(`msgstr "${lines[i].trim()}"`);
+          }
+        }
+
+        for (var i = 0; i < proFileStringLine.length; i++) {
+          if (proFileStringLine[i].trim()) {
+            if (setPOFile.has(proFileStringLine[i])) {
+              dublicatesInCurrentPoFileString.push(
+                proFileStringLine[i].trim().toString()
+              );
+            } else {
+              setPOFile.add(proFileStringLine[i].trim().toString());
+            }
+          }
+        }
+
+        var arrNewPoFileString = []
+        for (const item of setNewStringFile) {
+          if (setPOFile.has(item.toString())) {
+            allReadyIncludedItemsInPoFile.ad;
+          } else {
+            setPOFile.add(item);
+          }
+        }
+
+        for (const item3 of setPOFile) {
+          arrNewPoFileString.push(item3 + '\n')
+        }
+
+        // document.getElementById("latest_po_file_text").value = Array.from(setPOFile).join("\n");
+        document.getElementById("latest_po_file_text").value = arrNewPoFileString.join("\n");
+        document.getElementById("po_file_dublicate_text").value =
+          dublicatesInCurrentPoFileString.join("\n");
+        document.getElementById("latest_po_file_text").value =
+          Array.from(setPOFile).join("\n");
+        document.getElementById("new_string_file_dublicate_text").value = dublicatesInNewString.join("\n");
+          
+        setPOFile.clear();
+        setNewStringFile.clear();
+      });
+  </script>
+</html>
